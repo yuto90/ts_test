@@ -1,5 +1,5 @@
 // 計算式
-var input = "-2+10*10*10*2/2-2";
+var input = "-2+2*2/2-2";
 // 式の先頭に0を足す
 var addLeadingZero = function (input) { return "0" + input; };
 // かけ算とわり算あ含まれる式をたし算とひき算だけの式に変換する
@@ -44,18 +44,18 @@ var evaluateMathExpression = function (input) {
 };
 var addSubtract = function (input) {
     var left = 0;
-    var right = 0;
+    var right = "0";
     var ope = "+";
     for (var _i = 0, _a = input.split(""); _i < _a.length; _i++) {
         var elem = _a[_i];
         if (elem === "+" || elem === "-") {
             if (ope === "+") {
-                left += right;
+                left += Number(right);
             }
             else if (ope === "-") {
-                left -= right;
+                left -= Number(right);
             }
-            right = 0;
+            right = "";
             ope = elem;
         }
         else {

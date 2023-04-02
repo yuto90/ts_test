@@ -1,5 +1,5 @@
 // 計算式
-let input = "-2+10*10*10*2/2-2";
+let input = "-2+2*2/2-2";
 
 // 式の先頭に0を足す
 const addLeadingZero = (input: string) => "0" + input;
@@ -47,17 +47,18 @@ const evaluateMathExpression = (input: string): string => {
 
 const addSubtract = (input: string): number => {
   let left = 0;
-  let right = 0;
+  let right = "0";
   let ope = "+";
 
   for (const elem of input.split("")) {
     if (elem === "+" || elem === "-") {
       if (ope === "+") {
-        left += right;
+        left += Number(right);
       } else if (ope === "-") {
-        left -= right;
+        left -= Number(right);
       }
-      right = 0;
+
+      right = "";
       ope = elem;
     } else {
       right += Number(elem);
