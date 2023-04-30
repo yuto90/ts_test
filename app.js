@@ -1,173 +1,184 @@
-// // ▼今後の課題
-// // - 小数があると動かない
-// // - ()がある時先に計算する処理
-// // 計算式
-// let input = "-22*-2/2-2";
-// // 式の先頭に0を足す
-// const addLeadingZero = (input: string) => "0" + input;
-// // 0除算対策
-// const isDivideZero = (input: string) => (input.indexOf("/0") != -1 ? true : false);
-// // かけ算とわり算が含まれる式をたし算とひき算だけの式に変換する
-// const evaluateMathExpression = (input: string): string => {
-//   // 文字列に*か/が含まれている限り回す
-//   while (input.indexOf("*") != -1 || input.indexOf("/") != -1) {
-//     // 計算式内で次に計算する演算子があるインデックス番号を格納
-//     let currentOpeIndex: number;
-//     // 次に計算する演算子が出てきたかフラグ
-//     let existOpeFlg = false;
-//     // 計算式内で演算子が出てくるインデックス番号を格納
-//     const opeIndexList: number[] = [];
-//     // 式を一文字づつの配列にして回す
-//     input.split("").forEach((elem: string, index: number) => {
-//       //elemが*または/の時かつ、まだ*または/が出てない時
-//       if ((elem === "*" || elem === "/") && !existOpeFlg) {
-//         currentOpeIndex = index;
-//         opeIndexList.push(index);
-//         existOpeFlg = true;
-//       } else if (/[^0-9]/.test(elem)) {
-//         opeIndexList.push(index);
-//       }
-//     });
-//     // 計算の結果を格納
-//     let result: number;
-//     // 演算子があるインデックスを回す
-//     opeIndexList.forEach((ope: number, index: number) => {
-//       // カレント演算子のインデックスの両隣の数字を切り取って演算する
-//       // 「1+10*10/2」だったら「10*10」を計算
-//       if (ope === currentOpeIndex) {
-//         let left = Number(input.slice(opeIndexList[index - 1], ope));
-//         let right = Number(input.slice(currentOpeIndex + 1, opeIndexList[index + 1]));
-//         if (input[ope] === "*") {
-//           result = left * right;
-//         } else if (input[ope] === "/") {
-//           result = left / right;
-//         }
-//         // もともとの計算式を上書き
-//         input = input.slice(0, opeIndexList[index - 1] + 1) + result + input.slice(opeIndexList[index + 1]);
-//       }
-//     });
-//   }
-//   return input;
-// };
-// // 足し算と引き算をする
-// const addSubtract = (input: string): number => {
-//   // 左辺
-//   let left = 0;
-//   // 右辺
-//   let right = "0";
-//   // 次に計算する演算子
-//   let ope = "+";
-//   for (const elem of input.split("")) {
-//     if (elem === "+" || elem === "-") {
-//       if (ope === "+") {
-//         left += Number(right);
-//       } else if (ope === "-") {
-//         left -= Number(right);
-//       }
-//       right = "";
-//       ope = elem;
-//     } else {
-//       right += Number(elem);
-//     }
-//   }
-//   // 最後に残った式を計算
-//   if (ope === "+") {
-//     left += Number(right);
-//   } else if (ope === "-") {
-//     left -= Number(right);
-//   }
-//   return left;
-// };
-// // 0除算が式に含まれていないか判定
-// if (isDivideZero(input)) {
-//   throw "0除算が式に含まれています";
-// }
-// // todo 数字 or 演算子 or カッコ以外の文字が入っていたときのエラー処理
-// //if (/[0-9|+-*/|()]/.test(input)) {
-// //throw "不正な値が式に含まれています。";
-// //}
-// // 演算子が式の中で連続していた時
-// if (/r"[+\-*/]{2,}"/.test(input)) {
-//   throw "連続した演算子が含まれています";
-// }
-// // 文字列が-から始まる場合先頭に0を足す
-// if (input.slice(0, 1) === "-") {
-//   input = addLeadingZero(input);
-// }
-// // かけ算か割り算が含まれていた時は先に計算
-// if (input.indexOf("*") != -1 || input.indexOf("/") != -1) {
-//   input = evaluateMathExpression(input);
-// }
-// const result = addSubtract(input);
-// console.log(result);
-// 仕様
-// Todo クラスを作成してください。このクラスは、タイトル(title)と完了フラグ(completed)の2つのプロパティを持ちます。
-// TodoList クラスを作成してください。このクラスは、Todo オブジェクトを格納する配列を持ちます。
-// TodoList クラスには、以下のメソッドを実装してください。
-// addTodo：Todo オブジェクトを受け取り、配列に追加します。
-// deleteTodo：Todo オブジェクトを受け取り、配列から削除します。
-// getTodos：配列に格納された全ての Todo オブジェクトを返します。
-// getCompletedTodos：完了フラグが true の Todo オブジェクトのみを含む配列を返します。
-var Todo = /** @class */ (function () {
-    function Todo(_title, _completed) {
-        this._title = _title;
-        this._completed = _completed;
-        this._title = _title;
-        this._completed = _completed;
-    }
-    Object.defineProperty(Todo.prototype, "title", {
-        get: function () {
+"use strict";
+// todo ... todoアプリのモデル化
+// calc ... 四則演算プログラム
+// ブラウザで実行したいプログラム #############################################
+const scriptName = "calc";
+// #####################################################################
+if (scriptName === "todo") {
+    todoScript();
+}
+else if (scriptName === "calc") {
+    calcScript();
+}
+function todoScript() {
+    // 仕様
+    // Todo クラスを作成してください。このクラスは、タイトル(title)と完了フラグ(completed)の2つのプロパティを持ちます。
+    // TodoList クラスを作成してください。このクラスは、Todo オブジェクトを格納する配列を持ちます。
+    // TodoList クラスには、以下のメソッドを実装してください。
+    // addTodo：Todo オブジェクトを受け取り、配列に追加します。
+    // deleteTodo：Todo オブジェクトを受け取り、配列から削除します。
+    // getTodos：配列に格納された全ての Todo オブジェクトを返します。
+    // getCompletedTodos：完了フラグが true の Todo オブジェクトのみを含む配列を返します。
+    class Todo {
+        constructor(_title, _completed) {
+            this._title = _title;
+            this._completed = _completed;
+            this._title = _title;
+            this._completed = _completed;
+        }
+        get title() {
             return this._title;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Todo.prototype, "completed", {
-        get: function () {
+        }
+        get completed() {
             return this._completed;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Todo;
-}());
-var TodoList = /** @class */ (function () {
-    function TodoList() {
-        this.todos = [];
+        }
     }
-    // todoの追加
-    TodoList.prototype.addTodo = function (newTodo) {
-        this.todos.push(newTodo);
+    class TodoList {
+        constructor() {
+            this.todos = [];
+        }
+        // todoの追加
+        addTodo(newTodo) {
+            this.todos.push(newTodo);
+        }
+        // todoの削除
+        deleteTodo(deleteTargetTodo) {
+            this.todos.map((todo, index) => {
+                if (todo === deleteTargetTodo) {
+                    this.todos.splice(index, 1);
+                }
+            });
+        }
+        // すべてのTodoを返す
+        getTodos() {
+            return this.todos;
+        }
+        // 完了フラグがtrueのTodoオブジェクトを返却
+        getCompletedTodos() {
+            return this.todos.filter((todo) => {
+                return todo.completed === true;
+            });
+        }
+    }
+    const todoList = new TodoList();
+    const todo1 = new Todo("Buy milk", false);
+    const todo2 = new Todo("Do laundry", false);
+    const todo3 = new Todo("Clean kitchen", true);
+    todoList.addTodo(todo1);
+    todoList.addTodo(todo2);
+    todoList.addTodo(todo3);
+    console.log(todoList.getTodos()); // [todo1, todo2, todo3]
+    console.log(todoList.getCompletedTodos()); // [todo3]
+    todoList.deleteTodo(todo2);
+    console.log(todoList.getTodos()); // [todo1, todo3]
+}
+function calcScript() {
+    // ▼今後の課題
+    // - 小数があると動かない
+    // - ()がある時先に計算する処理
+    // 計算式
+    let input = "-22*-2/2-2";
+    // 式の先頭に0を足す
+    const addLeadingZero = (input) => "0" + input;
+    // 0除算対策
+    const isDivideZero = (input) => (input.indexOf("/0") != -1 ? true : false);
+    // かけ算とわり算が含まれる式をたし算とひき算だけの式に変換する
+    const evaluateMathExpression = (input) => {
+        // 文字列に*か/が含まれている限り回す
+        while (input.indexOf("*") != -1 || input.indexOf("/") != -1) {
+            // 計算式内で次に計算する演算子があるインデックス番号を格納
+            let currentOpeIndex;
+            // 次に計算する演算子が出てきたかフラグ
+            let existOpeFlg = false;
+            // 計算式内で演算子が出てくるインデックス番号を格納
+            const opeIndexList = [];
+            // 式を一文字づつの配列にして回す
+            input.split("").forEach((elem, index) => {
+                //elemが*または/の時かつ、まだ*または/が出てない時
+                if ((elem === "*" || elem === "/") && !existOpeFlg) {
+                    currentOpeIndex = index;
+                    opeIndexList.push(index);
+                    existOpeFlg = true;
+                }
+                else if (/[^0-9]/.test(elem)) {
+                    opeIndexList.push(index);
+                }
+            });
+            // 計算の結果を格納
+            let result;
+            // 演算子があるインデックスを回す
+            opeIndexList.forEach((ope, index) => {
+                // カレント演算子のインデックスの両隣の数字を切り取って演算する
+                // 「1+10*10/2」だったら「10*10」を計算
+                if (ope === currentOpeIndex) {
+                    let left = Number(input.slice(opeIndexList[index - 1], ope));
+                    let right = Number(input.slice(currentOpeIndex + 1, opeIndexList[index + 1]));
+                    if (input[ope] === "*") {
+                        result = left * right;
+                    }
+                    else if (input[ope] === "/") {
+                        result = left / right;
+                    }
+                    // もともとの計算式を上書き
+                    input = input.slice(0, opeIndexList[index - 1] + 1) + result + input.slice(opeIndexList[index + 1]);
+                }
+            });
+        }
+        return input;
     };
-    // todoの削除
-    TodoList.prototype.deleteTodo = function (deleteTargetTodo) {
-        var _this = this;
-        this.todos.map(function (todo, index) {
-            if (todo === deleteTargetTodo) {
-                _this.todos.splice(index, 1);
+    // 足し算と引き算をする
+    const addSubtract = (input) => {
+        // 左辺
+        let left = 0;
+        // 右辺
+        let right = "0";
+        // 次に計算する演算子
+        let ope = "+";
+        for (const elem of input.split("")) {
+            if (elem === "+" || elem === "-") {
+                if (ope === "+") {
+                    left += Number(right);
+                }
+                else if (ope === "-") {
+                    left -= Number(right);
+                }
+                right = "";
+                ope = elem;
             }
-        });
+            else {
+                right += Number(elem);
+            }
+        }
+        // 最後に残った式を計算
+        if (ope === "+") {
+            left += Number(right);
+        }
+        else if (ope === "-") {
+            left -= Number(right);
+        }
+        return left;
     };
-    // すべてのTodoを返す
-    TodoList.prototype.getTodos = function () {
-        return this.todos;
-    };
-    // 完了フラグがtrueのTodoオブジェクトを返却
-    TodoList.prototype.getCompletedTodos = function () {
-        return this.todos.filter(function (todo) {
-            return todo.completed === true;
-        });
-    };
-    return TodoList;
-}());
-var todoList = new TodoList();
-var todo1 = new Todo("Buy milk", false);
-var todo2 = new Todo("Do laundry", false);
-var todo3 = new Todo("Clean kitchen", true);
-todoList.addTodo(todo1);
-todoList.addTodo(todo2);
-todoList.addTodo(todo3);
-console.log(todoList.getTodos()); // [todo1, todo2, todo3]
-console.log(todoList.getCompletedTodos()); // [todo3]
-todoList.deleteTodo(todo2);
-console.log(todoList.getTodos()); // [todo1, todo3]
+    // 0除算が式に含まれていないか判定
+    if (isDivideZero(input)) {
+        throw "0除算が式に含まれています";
+    }
+    // todo 数字 or 演算子 or カッコ以外の文字が入っていたときのエラー処理
+    //if (/[0-9|+-*/|()]/.test(input)) {
+    //throw "不正な値が式に含まれています。";
+    //}
+    // 演算子が式の中で連続していた時
+    if (/r"[+\-*/]{2,}"/.test(input)) {
+        throw "連続した演算子が含まれています";
+    }
+    // 文字列が-から始まる場合先頭に0を足す
+    if (input.slice(0, 1) === "-") {
+        input = addLeadingZero(input);
+    }
+    // かけ算か割り算が含まれていた時は先に計算
+    if (input.indexOf("*") != -1 || input.indexOf("/") != -1) {
+        input = evaluateMathExpression(input);
+    }
+    const result = addSubtract(input);
+    console.log(result);
+}
+//# sourceMappingURL=app.js.map
