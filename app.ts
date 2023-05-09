@@ -1,15 +1,64 @@
 // todo ... todoアプリのモデル化
 // calc ... 四則演算プログラム
+// bankAccount ... 銀行口座のモデル化
 
 // ブラウザで実行したいプログラム #############################################
-const scriptName: string = "calc";
+const scriptName: string = "bankAccount";
 // #####################################################################
 
 if (scriptName === "todo") {
   todoScript();
 } else if (scriptName === "calc") {
   calcScript();
+} else if (scriptName === "bankAccount") {
+  bankAccount();
 }
+
+function bankAccount() {
+  //* 仕様:
+  //* BankAccountクラスには、アカウントの所有者の名前（string型）と残高（number型）を保持するプライベート変数がある。
+  //* BankAccountクラスには、以下のパブリックメソッドがある:
+  //* a.deposit(amount: number): void - 指定された金額をアカウントに預ける
+  //* b.withdraw(amount: number): boolean - 指定された金額をアカウントから引き出す。引き出しに成功した場合はtrue、残高不足で引き出しに失敗した場合はfalseを返す
+  //* c.getBalance(): number - 現在の残高を返す
+  //* d.getOwner(): string - アカウントの所有者の名前を返す
+  //* BankAccountクラスのコンストラクタは、アカウントの所有者の名前と初期残高を受け取る。
+
+  class BankAccount {
+
+    constructor(private _owner: string, private _amount: number) { }
+
+    // 指定された金額をアカウントに預ける
+    public deposit(amount: number): void {
+      this._amount += amount;
+    }
+
+    // 指定された金額をアカウントから引き出す。引き出しに成功した場合はtrue、残高不足で引き出しに失敗した場合はfalseを返す
+    public withdraw(amount: number): boolean {
+      // 残高の方が少なければ引き出しに失敗
+      if (this._amount < amount) {
+        return false
+      }
+
+      this._amount -= amount;
+
+      return true;
+    }
+
+    // アカウントの所有者の名前を返す
+    public getOwner(): string {
+      return this._owner;
+    }
+
+    // 現在の残高を返す 
+    public getBalance(): number {
+      return this._amount;
+    }
+  }
+
+  const yutoBank = new BankAccount('yuto', 10000);
+}
+
 
 function todoScript() {
   // 仕様
